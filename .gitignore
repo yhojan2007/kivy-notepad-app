@@ -1,0 +1,86 @@
+# ==========================================
+# 🐍 CONFIGURACIÓN ESPECÍFICA DE PYTHON
+# ==========================================
+# Archivos de bytes compilados
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribución / Empaquetado de Python
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Entornos virtuales locales (¡Nunca subas tu venv!)
+.venv/
+venv/
+ENV/
+env/
+pythonenv/
+
+# ==========================================
+# 📱 CONFIGURACIÓN DE KIVY & BUILDOZER (Android/iOS)
+# ==========================================
+# Directorios de compilación temporal de Buildozer
+.buildozer/
+bin/
+
+# Archivo de especificación local de Buildozer (si deseas ignorar cambios locales)
+# NOTA: Comenta la línea de abajo si quieres mantener el buildozer.spec bajo control de versiones.
+# Es buena práctica subirlo, pero excluir contraseñas o tokens (usando variables de entorno).
+#.buildozer.spec
+
+# Archivos temporales de empaquetado y caché de Kivy
+.kivy/
+*.kv.bak
+
+# ==========================================
+# 📦 PYINSTALLER / BRIEFCASE (Ejecutables de Escritorio)
+# ==========================================
+# Archivos generados al empaquetar para Windows/Mac/Linux
+build/
+dist/
+*.spec
+
+# ==========================================
+# 🔐 SEGURIDAD Y CONFIGURACIONES (¡Crítico!)
+# ==========================================
+# Archivos de variables de entorno locales (claves API, tokens)
+.env
+.env.local
+.env.*.local
+
+# Claves de firma de Android (Keystores / JKS)
+# ¡NUNCA subas tus llaves de producción a GitHub!
+*.keystore
+*.jks
+*.p12
+
+# ==========================================
+# ⚙️ EDITORES DE CÓDIGO (VS Code, PyCharm)
+# ==========================================
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains / PyCharm
+.idea/
+
+# ==========================================
+# 🖥️ ARCHIVOS BASURA DEL SISTEMA OPERATIVO
+# ==========================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.fuse_hidden*
+.directory
