@@ -1,0 +1,36 @@
+<LoginScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        paddign: 40
+        spacing: 20
+
+        Label:
+            text: "Login Notepad"
+            font_size: 32
+
+        TextInput:
+            id: username
+            hint_text: "Usuario"
+            multiline: False
+
+        TextInput:
+            id: password
+            password: True
+            hint_text: "Contrasena"
+            multiline: False
+
+        Button:
+            text: "INICIAR SESION"
+            size_hint_y: None
+            height: 50
+            on_press: root.iniciar_sesion()
+
+        Label
+            id: mensaje
+            text: ""
+
+
+
+
+
