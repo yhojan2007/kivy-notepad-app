@@ -8,7 +8,7 @@ from app.screens.editor_screen import EditorScreen
 
 
 
-class LoginApp(App):  
+class NotepadApp(App):  
     
     def build(self) -> ScreenManager:
         Builder.load_file("kv/login.kv")
@@ -26,4 +26,4 @@ class LoginApp(App):
         
 
 if __name__ == "__main__":
-    LoginApp().run()
+    NotepadApp().run()
