@@ -1,0 +1,48 @@
+<HomeScreen>
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 15
+        spacing: 15
+
+        # ENCABEZADO -------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+
+            Label:
+                text: "NotePad"
+                font_size: dp(28)
+                bold: True
+                haling: 'left'
+                valing: 'middle'
+
+            Button:
+                text: '+'
+                size_hint_x: None
+                font_size: dp(40)
+                background_color: 0.1, 0.6, 0.9, 1
+
+                on_press: root.crear_nueva_nota()
+
+        # BUSCADOR ---------------------------
+
+        TextInput:
+            id: buscador
+            hint_text: "Buscar notas..."
+            multiline: False
+            size_hint_y: None
+            height: dp(50)
+
+        # LISTA DE NOTAS ------------------------
+
+        ScrollView:
+
+            GridLayout:
+                id: notas_container
+                cols: 1
+                size_hint_y: None
+                spacing: 10
+
+                height: self.minimum_height
