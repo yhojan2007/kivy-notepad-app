@@ -1,0 +1,59 @@
+<EditorScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 15
+        spacing: 15
+
+        # Barra de Herramientas y Navegacion
+        BoxLayout:
+            size_hint_y: None
+            height: '45dp'
+            spacing: 5
+
+            Button:
+                text: '←'
+                size_hint_x: None
+                width: '80dp'
+                
+                on_press: root.regresar_home()
+
+            Button:
+                text: '↶ Z'
+                background_color: 0.5, 0.5, 0.5, 1
+
+                on_press: root.deshacer_cambio()
+
+            Button:
+                text: '↷ Y'
+                background_color: 0.5, 0.5, 0.5, 1
+
+                on_press: root.rehacer_cambio()
+
+            Button:
+                text: 'Guardar'
+                background_color: 0.2, 0.8, 0.3, 1
+
+                on_press: root.guardar_nota()
+
+            Button:
+                text: 'Eliminar'
+                size_hint_x: None
+                width: '80dp'
+                background_color: 0.9, 0.2, 0.2, 1
+
+                on_press: root.eliminar_nota()
+
+        # Apartado para el Titulo -----------------
+        TextInput:
+            id: titulo_nota
+            hint_text: 'Titulo de la nota'
+            size_hint_y: None
+            height: '45dp'
+            multiline: False
+
+        # Apartado para el Contenido del Bloc de Notas ------------------
+        TextInput:
+            id: contenido_nota
+            hint_text: 'Escribe el contenido de tu nota aqui...'
+            multiline: True
+            on_text: root.registrar_cambio(self.text)           #CAPTURAR CADA TECLA
