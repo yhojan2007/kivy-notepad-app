@@ -1,5 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from app.services.auth_service import AuthService
+from kivy.app import App
 
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
@@ -12,6 +13,7 @@ class LoginScreen(Screen):
 
         if self.auth_service.authenticate(username, password):
             self.ids.mensaje.text = "Inicio de sesión exitoso"
+            self.manager.current = "home"
             # Aquí puedes cambiar a la pantalla principal de la aplicación
         else:
             self.ids.mensaje.text = "Nombre de usuario o contraseña incorrectos"
