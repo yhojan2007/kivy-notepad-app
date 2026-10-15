@@ -2,27 +2,39 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.app import App
 
-from app.models.lista_nota import ListaNota
-from app.models.nota_editor import NotaEditor
-
 class HomeScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.lista_nota = ListaNota()  # Inicializa la lista de notas
+    def on_enter(self) -> None:
+        self.mostrar_notas()
 
-    def mostrar_notas(self):
-        notas = self.lista_nota.obtener_todas_las_notas()
-        self.ids.lista_notas.clear_widgets()  # Limpiar la lista antes de mostrar las notas
+    def mostrar_notas(self, filtro=""):
+        app = App.get_running_app()
+        notas = app.lista_nota.obtener_todas_las_notas()
 
+        contenedor = self.ids.notas_container
+        contenedor.clear_widgets()
+
+        filtro = (filtro or "").lower()
         for nota in notas:
-            boton_nota = Button(
-                text=nota["titulo"],
-                size_hint_y=None,
-                height=40
-            )
-            boton_nota.bind(on_release=lambda btn, n=nota: self.cargar_nota(n))
-            self.ids.lista_notas.add_widget(boton_nota)
+            if filtro and filtro not in nota["titulo"].lower() \
+               and filtro not in nota["contenido"].lower():
+                continue
 
-    def crear_nueva_nota(self):
-        
-        self.manager.current = "editor"
+            btn = Button(
+                text=f"{nota['titulo']}",
+                size_hint_y=None,
+                height=50,
+            )
+            btn.bind(on_release=lambda b, n=nota: self.abrir_nota(n["id"]))
+            contenedor.add_widget(btn)
+
+    def abrir_nota(self, nota_id) -> None:
+        editor = self.manager.get_screen('editor')
+        editor.cargar_nota(nota_id)
+        self.manager.current = 'editor'
+
+    def crear_nueva_nota(self) -> None:
+        editor = self.manager.get_screen('editor')
+        editor.crear_nueva_nota()
+        self.manager.current = 'editor'
+
+
