@@ -17,7 +17,7 @@ resource_add_path(BASE_DIR)        # así la fuente de iconos se encuentra sin i
 
 Window.clearcolor = get_color_from_hex("#FFFFFF")
 Window.softinput_mode = "resize"   # el teclado empuja el contenido en vez de taparlo
-# Window.size = (360, 700)         # descomenta para simular un celular en PC
+Window.size = (360, 700)         # descomenta para simular un celular en PC
 
 
 class NotepadApp(App):
