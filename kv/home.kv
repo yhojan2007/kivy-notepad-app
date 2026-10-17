@@ -1,31 +1,23 @@
+# ---------- Tarjeta de nota (píldora) ----------
 <NotaItem>:
     orientation: 'vertical'
     size_hint_y: None
-    height: dp(84)
-    padding: dp(14), dp(8)
+    height: dp(88)
+    padding: dp(30), dp(14), dp(24), dp(14)
     spacing: dp(2)
     canvas.before:
         Color:
-            rgba: (0.24, 0.24, 0.28, 1) if self.state == 'down' else (0.16, 0.16, 0.19, 1)
+            rgba: C_SURFACE_DOWN if self.state == 'down' else C_SURFACE
         RoundedRectangle:
             pos: self.pos
             size: self.size
-            radius: [dp(12)]
+            radius: [self.height / 2]
 
     Label:
         text: root.titulo
-        bold: True
-        font_size: sp(17)
-        halign: 'left'
-        valign: 'middle'
-        text_size: self.size
-        shorten: True
-        shorten_from: 'right'
-
-    Label:
-        text: root.preview
-        font_size: sp(13)
-        color: 0.75, 0.75, 0.78, 1
+        font_name: FONT_BOLD
+        font_size: sp(20)
+        color: C_INK
         halign: 'left'
         valign: 'middle'
         text_size: self.size
@@ -34,60 +26,133 @@
 
     Label:
         text: root.fecha
-        font_size: sp(11)
-        color: 0.45, 0.65, 0.95, 1
+        font_size: sp(13)
+        color: C_MUTED
+        size_hint_y: None
+        height: dp(20)
         halign: 'left'
         valign: 'middle'
         text_size: self.size
 
 
+# ---------- Fila de sugerencia del buscador ----------
+<SugerenciaItem>:
+    size_hint_y: None
+    height: dp(50)
+    padding: dp(18), 0, dp(18), 0
+    spacing: dp(12)
+    canvas.before:
+        Color:
+            rgba: C_SURFACE if self.state == 'down' else (0, 0, 0, 0)
+        RoundedRectangle:
+            pos: self.x + dp(6), self.y + dp(3)
+            size: self.width - dp(12), self.height - dp(6)
+            radius: [dp(14)]
+
+    Label:
+        text: '\ue8b6'
+        font_name: FONT_ICONS
+        font_size: sp(18)
+        color: C_MUTED
+        size_hint_x: None
+        width: dp(20)
+
+    Label:
+        text: root.texto
+        font_size: sp(16)
+        color: C_INK
+        halign: 'left'
+        valign: 'middle'
+        text_size: self.size
+        shorten: True
+        shorten_from: 'right'
+
+
+# ---------- Pantalla principal ----------
 <HomeScreen>:
     canvas.before:
         Color:
-            rgba: 0.09, 0.09, 0.11, 1
+            rgba: C_BG
         Rectangle:
             pos: self.pos
             size: self.size
 
     BoxLayout:
         orientation: 'vertical'
-        padding: dp(15)
-        spacing: dp(12)
+        padding: dp(20), dp(16), dp(20), 0
+        spacing: dp(16)
 
-        BoxLayout:
+        Label:
+            text: 'Notas'
+            font_name: FONT_BOLD
+            font_size: sp(34)
+            color: C_INK
             size_hint_y: None
-            height: dp(50)
+            height: dp(52)
+            halign: 'left'
+            valign: 'middle'
+            text_size: self.size
+
+        # Buscador con la lupa dentro
+        BoxLayout:
+            id: buscador_caja
+            size_hint_y: None
+            height: dp(52)
+            padding: dp(18), 0, dp(14), 0
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: C_SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [self.height / 2]
 
             Label:
-                text: "NotePad"
-                font_size: sp(26)
-                bold: True
-                halign: 'left'
-                valign: 'middle'
-                text_size: self.size
-
-            Button:
-                text: '+'
+                text: '\ue8b6'
+                font_name: FONT_ICONS
+                font_size: sp(24)
+                color: C_MUTED
                 size_hint_x: None
-                width: dp(50)
-                font_size: sp(28)
-                background_normal: ''
-                background_color: 0.1, 0.6, 0.9, 1
-                on_press: root.crear_nueva_nota()
+                width: dp(26)
 
-        TextInput:
-            id: buscador
-            hint_text: "Buscar notas..."
-            multiline: False
-            size_hint_y: None
-            height: dp(46)
-            padding: dp(12), dp(12)
-            on_text: root.mostrar_notas(self.text)
+            CampoLimpio:
+                id: buscador
+                hint_text: 'Buscar notas'
+                hint_text_color: C_MUTED
+                multiline: False
+                font_size: sp(17)
+                padding: 0, (self.height - self.line_height) / 2
+                on_text: root.al_escribir(self.text)
+                on_focus: root.al_cambiar_foco(self.focus)
+                on_text_validate: self.focus = False
 
         ScrollView:
+            bar_width: dp(3)
+            bar_color: 0.07, 0.07, 0.09, 0.35
+            bar_inactive_color: 0, 0, 0, 0
+            scroll_type: ['bars', 'content']
+
             GridLayout:
                 id: notas_container
                 cols: 1
                 size_hint_y: None
-                spacing: dp(10)
                 height: self.minimum_height
+                spacing: dp(12)
+                padding: 0, dp(4), 0, dp(110)   # espacio para que el botón flotante no tape la última nota
+
+    # Notas sugeridas (Trie): flotan debajo del buscador
+    Tarjeta:
+        id: panel_sugerencias
+        orientation: 'vertical'
+        size_hint: None, None
+        radio: dp(22)
+        width: buscador_caja.width
+        height: self.minimum_height
+        pos: buscador_caja.x, buscador_caja.y - self.height - dp(8)
+        opacity: 1 if self.children else 0
+
+    BotonFlotante:
+        text: '\ue145'
+        pos_hint: {'right': .93, 'y': .03}
+        on_release: root.crear_nueva_nota()

@@ -1,59 +1,113 @@
+# ---------- Fila del menú de 3 puntos ----------
+<ItemMenu>:
+    size_hint_y: None
+    height: dp(52)
+    padding: dp(14), 0, dp(14), 0
+    spacing: dp(12)
+    canvas.before:
+        Color:
+            rgba: C_SURFACE if self.state == 'down' else (0, 0, 0, 0)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(14)]
+
+    Label:
+        text: root.icono
+        font_name: FONT_ICONS
+        font_size: sp(22)
+        color: root.color_item
+        size_hint_x: None
+        width: dp(26)
+
+    Label:
+        text: root.texto
+        font_size: sp(16)
+        color: root.color_item
+        halign: 'left'
+        valign: 'middle'
+        text_size: self.size
+
+
+# ---------- Pantalla del editor ----------
 <EditorScreen>:
+    canvas.before:
+        Color:
+            rgba: C_BG
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     BoxLayout:
         orientation: 'vertical'
-        padding: 15
-        spacing: 15
+        padding: dp(14), dp(10), dp(14), dp(10)
+        spacing: dp(6)
 
-        # Barra de Herramientas y Navegacion
+        # Barra superior: atrás · (espacio) · deshacer · rehacer · menú
         BoxLayout:
             size_hint_y: None
-            height: '45dp'
-            spacing: 5
+            height: dp(52)
+            spacing: dp(2)
 
-            Button:
-                text: '←'
-                size_hint_x: None
-                width: '80dp'
-                
-                on_press: root.regresar_home()
+            BotonIcono:
+                text: '\ue5c4'
+                on_release: root.regresar_home()
 
-            Button:
-                text: '↶ Z'
-                background_color: 0.5, 0.5, 0.5, 1
+            Widget:
 
-                on_press: root.deshacer_cambio()
+            BotonIcono:
+                text: '\ue166'
+                disabled: not root.puede_deshacer
+                on_release: root.deshacer_cambio()
 
-            Button:
-                text: '↷ Y'
-                background_color: 0.5, 0.5, 0.5, 1
+            BotonIcono:
+                text: '\ue15a'
+                disabled: not root.puede_rehacer
+                on_release: root.rehacer_cambio()
 
-                on_press: root.rehacer_cambio()
+            BotonIcono:
+                id: boton_menu
+                text: '\ue5d4'
+                on_release: root.toggle_menu()
 
-            Button:
-                text: 'Guardar'
-                background_color: 0.2, 0.8, 0.3, 1
-
-                on_press: root.guardar_nota()
-
-            Button:
-                text: 'Eliminar'
-                size_hint_x: None
-                width: '80dp'
-                background_color: 0.9, 0.2, 0.2, 1
-
-                on_press: root.eliminar_nota()
-
-        # Apartado para el Titulo -----------------
-        TextInput:
+        CampoLimpio:
             id: titulo_nota
-            hint_text: 'Titulo de la nota'
-            size_hint_y: None
-            height: '45dp'
+            hint_text: 'Título'
             multiline: False
+            font_name: FONT_BOLD
+            font_size: sp(30)
+            size_hint_y: None
+            height: dp(68)
+            padding: dp(8), (self.height - self.line_height) / 2
 
-        # Apartado para el Contenido del Bloc de Notas ------------------
-        TextInput:
+        CampoLimpio:
             id: contenido_nota
-            hint_text: 'Escribe el contenido de tu nota aqui...'
+            hint_text: 'Escribe tu nota aquí...'
             multiline: True
-            on_text: root.registrar_cambio(self.text)           #CAPTURAR CADA TECLA
+            font_size: sp(18)
+            line_spacing: dp(4)
+            padding: dp(8), dp(8)
+            on_text: root.registrar_cambio(self.text)
+
+    # Menú de 3 puntos: queda fuera de la pantalla mientras está cerrado (así no bloquea toques)
+    Tarjeta:
+        id: menu_desplegable
+        orientation: 'vertical'
+        size_hint: None, None
+        size: dp(190), dp(124)
+        radio: dp(20)
+        padding: dp(8)
+        spacing: dp(2)
+        pos: (boton_menu.right - self.width, boton_menu.y - self.height - dp(4)) if root.menu_abierto else (-5000, -5000)
+
+        ItemMenu:
+            icono: '\ue161'
+            texto: 'Guardar'
+            color_item: C_INK
+            on_release: root.guardar_nota()
+
+        ItemMenu:
+            icono: '\ue872'
+            texto: 'Eliminar'
+            color_item: C_DANGER
+            on_release: root.eliminar_nota()
