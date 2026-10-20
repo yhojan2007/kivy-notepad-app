@@ -1,0 +1,2 @@
+FROM kivy/buildozer:latest
+WORKDIR /home/user/hostcwd
